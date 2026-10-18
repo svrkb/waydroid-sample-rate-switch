@@ -1,0 +1,20 @@
+name: smoke
+on:
+  push:
+  pull_request:
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Bash syntax
+        run: bash -n waydroid-sample-rate.sh
+      - name: Python compile
+        run: python3 -m py_compile patch_waydroid_audio.py
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Shell tests
+        run: bash tests/test_shell.sh
